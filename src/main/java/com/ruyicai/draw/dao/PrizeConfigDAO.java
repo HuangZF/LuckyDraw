@@ -1,70 +1,70 @@
 package com.ruyicai.draw.dao;
 
-import java.util.ArrayList;
 import java.util.List;
-
 import javax.persistence.EntityManager;
-import javax.persistence.LockModeType;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-
-import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ruyicai.draw.domain.PrizeConfig;
+import com.ruyicai.draw.domain.PrizeInfo;
+import com.ruyicai.draw.domain.UserDraw;
 
 @Component
 public class PrizeConfigDAO {
 
 	@PersistenceContext
 	private EntityManager entityManager;
-	
-	public PrizeConfig findPrizeConfig(Integer id) {
-		PrizeConfig prizeConfig = entityManager.find(PrizeConfig.class, id);
-		return prizeConfig;
-	}
-	
-	public PrizeConfig findPrizeConfig(Integer id, boolean lock) {
-		PrizeConfig prizeConfig = entityManager.find(PrizeConfig.class, id, lock ? LockModeType.PESSIMISTIC_WRITE
-				: LockModeType.NONE);
-		return prizeConfig;
-	}
-	
-	@Transactional
-	public PrizeConfig merge(PrizeConfig prizeConfig) {
-		PrizeConfig merged = this.entityManager.merge(prizeConfig);
-		this.entityManager.flush();
-		return merged;
-	}
-	
-	@Transactional
-	public List<PrizeConfig> readBatch(String id) {
-		if (StringUtils.isBlank(id)) {
-			throw new IllegalArgumentException("the argument id is require");
-		}
-		String[] idArray = id.split(",");
-		List<PrizeConfig> resultList = new ArrayList<PrizeConfig>();
-		for (String iditem : idArray) {
-			resultList.add(read(Integer.parseInt(iditem)));
-		}
-		return resultList;
-	}
-	
-	@Transactional
-	public PrizeConfig read(int id) {
-		PrizeConfig prizeConfig = findPrizeConfig(id, true);
-		return entityManager.merge(prizeConfig);
-	}
-	
+
 	/**
 	 * 获取所有的奖品信息
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@Transactional
-	public List<PrizeConfig> findPrizeConfigList() {
-		Query query = this.entityManager.createQuery("from prizeconfig");
-		return query.getResultList();
+	public List<PrizeInfo> findPrizeConfigList() {
+		String sql = "select pi.id,pi.name,pi.level,pi.num,pi.arise_probability,pi.delay_probability from prize_info pi order by pi.arise_probability asc";
+		Query q = entityManager.createNativeQuery(sql, PrizeInfo.class);
+		List<PrizeInfo> returnList = q.getResultList();
+		return returnList;
 	}
-	
+
+	/**
+	 * 更新奖品信息.
+	 * @param prizeConfig
+	 * @return
+	 */
+	@Transactional
+	public PrizeInfo merge(PrizeInfo prizeConfig) {
+		PrizeInfo merged = this.entityManager.merge(prizeConfig);
+		this.entityManager.flush();
+		return merged;
+	}
+
+	/**
+	 * 增加用户抽奖信息
+	 * @param userMap
+	 * @return
+	 */
+	@Transactional
+	public UserDraw createUserDraw(UserDraw userDraw) {
+		entityManager.persist(userDraw);
+		return userDraw;
+	}
+
+	/**
+	 * 更新奖品信息，同时添加用户抽奖信息.
+	 * @param prizeConfig
+	 * @param ud
+	 */
+	@Transactional
+	public void updatePrizeInfo(PrizeInfo prizeConfig, UserDraw ud)
+	{
+		// 更新奖品信息
+		merge(prizeConfig);
+
+		// 添加用户抽奖信息
+		createUserDraw(ud);
+	}
+
 }

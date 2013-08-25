@@ -3,13 +3,13 @@
 
 package com.ruyicai.draw.domain;
 
-import com.ruyicai.draw.domain.PrizeConfig;
+import com.ruyicai.draw.domain.PrizeInfo;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-privileged aspect PrizeConfig_Roo_ToString {
+privileged aspect PrizeInfo_Roo_ToString {
     
-    public String PrizeConfig.toString() {
+    public String PrizeInfo.toString() {
         return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
     

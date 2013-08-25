@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.ruyicai</groupId>
-  <artifactId>LuckyDraw</artifactId>
-  <packaging>jar</packaging>
-  <version>0.0.1-SNAPSHOT</version>
-  <name>LuckyDraw</name>
-  <url>http://maven.apache.org</url>
-  
-  <properties>
-		<prelaunch.tomcat.port>9080</prelaunch.tomcat.port>
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.ruyicai</groupId>
+	<artifactId>LuckyDraw</artifactId>
+	<packaging>war</packaging>
+	<version>0.1.0.BUILD-SNAPSHOT</version>
+	<name>LuckyDraw</name>
+
+	<properties>
+		<prelaunch.tomcat.port>8090</prelaunch.tomcat.port>
 		<roo.version>1.2.3.RELEASE</roo.version>
 		<aspectj.version>1.6.11</aspectj.version>
 		<spring.version>3.1.0.RELEASE</spring.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<memcache.client.ip>192.168.99.30:12000,192.168.99.31:12000</memcache.client.ip>
-  </properties>
+	</properties>
 
 	<repositories>
 		<repository>
@@ -32,14 +32,13 @@
 			<url>http://www.g3cai.cn/nexus/content/repositories/public/</url>
 		</pluginRepository>
 	</pluginRepositories>
-	
-  <dependencies>
-	    <dependency>
-	      <groupId>junit</groupId>
-	      <artifactId>junit</artifactId>
-	      <version>3.8.1</version>
-	      <scope>test</scope>
-	    </dependency>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.2</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
@@ -86,7 +85,8 @@
 			<artifactId>hibernate-jpa-2.0-api</artifactId>
 			<version>1.0.0.Final</version>
 		</dependency>
-		<dependency>			<groupId>org.hibernate</groupId>
+		<dependency>
+			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
 			<version>4.1.0.Final</version>
 			<exclusions>
@@ -128,9 +128,14 @@
 			<version>1.4</version>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>1.4</version>
+			<version>2.0.1</version>
 			<type>jar</type>
 		</dependency>
 		<dependency>
@@ -147,7 +152,7 @@
 		<dependency>
 			<groupId>org.apache.struts</groupId>
 			<artifactId>struts2-core</artifactId>
-			<version>2.2.3</version>
+			<version>2.3.4</version>
 			<type>jar</type>
 			<exclusions>
 				<exclusion>
@@ -171,7 +176,7 @@
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>1.4</version>
+			<version>2.0.1</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
@@ -301,6 +306,12 @@
 			<classifier/>
 		</dependency>
 		<dependency>
+			<groupId>yeepay</groupId>
+			<artifactId>htmlcommon</artifactId>
+			<version>3.0</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
 			<groupId>dom4j</groupId>
 			<artifactId>dom4j</artifactId>
 			<version>1.6.1</version>
@@ -323,7 +334,6 @@
 		  <type>jar</type>
 		</dependency>
 	</dependencies>
-	
 	<build>
 		<finalName>LuckyDraw</finalName>
 		<plugins>
@@ -453,6 +463,9 @@
 						<directory>src/main/resources</directory>
 						<filtering>true</filtering>
 					</resource>
+					<resource>
+						<directory>conf/local</directory>
+					</resource>
 				</resources>
 			</build>
 			<activation>
@@ -461,13 +474,19 @@
 			<properties>
 				<maven.test.skip>true</maven.test.skip>
 				<sys.target>test</sys.target>
-				<database.url.mysql>jdbc:mysql://192.168.0.92:3306/chargecenter?characterEncoding=utf-8</database.url.mysql>
+				<database.url.mysql>jdbc:mysql://localhost:3306/luckydraw?characterEncoding=utf-8</database.url.mysql>
 				<database.driverClassName.mysql>com.mysql.jdbc.Driver</database.driverClassName.mysql>
-				<database.username.mysql>jrtConsole</database.username.mysql>
-				<database.password.mysql>jrtConsole</database.password.mysql>
+				<database.username.mysql>root</database.username.mysql>
+				<database.password.mysql>af7226</database.password.mysql>
 				<tlot.id.prefix>TE</tlot.id.prefix>
 				<memcache.client.ip>192.168.0.92:12000</memcache.client.ip>
 				<plat.wap.url>http://219.143.210.70</plat.wap.url>
+				<plat.url>http://pay.soopay.net</plat.url>
+				<mer.prikey.path>c:/temp/cert/6307_RuYiCai.key.p8</mer.prikey.path>
+				<mer6390.prikey.path>c:/temp/cert/6390_RuYiChaiYingYong.key.p8</mer6390.prikey.path>
+				<plat.cert.path>c:/temp/cert/cert_2d59.crt</plat.cert.path>
+				<prikey.expand.name>.p8</prikey.expand.name>
+				<platcert.expand.name>.crt</platcert.expand.name>
 				<plat.pay.product.name>spay</plat.pay.product.name>
 				<plat.micropay.product.name>micropay</plat.micropay.product.name>
 				<plat.wap.pay.product.name>pluginpay</plat.wap.pay.product.name>
@@ -481,6 +500,9 @@
 						<directory>src/main/resources</directory>
 						<filtering>true</filtering>
 					</resource>
+					<resource>
+						<directory>conf/118</directory>
+					</resource>
 				</resources>
 			</build>
 			<properties>
@@ -493,6 +515,12 @@
 				<tlot.id.prefix>TE</tlot.id.prefix>
 				<memcache.client.ip>192.168.0.92:12000</memcache.client.ip>
 				<plat.wap.url>http://219.143.210.70</plat.wap.url>
+				<plat.url>http://pay.soopay.net</plat.url>
+				<mer.prikey.path>/home/appusr/chargecenter/umpay/6307_RuYiCai.key.p8</mer.prikey.path>
+				<mer6390.prikey.path>/home/appusr/chargecenter/umpay/6390_RuYiChaiYingYong.key.p8</mer6390.prikey.path>
+				<plat.cert.path>/home/appusr/chargecenter/umpay/cert_2d59.crt</plat.cert.path>
+				<prikey.expand.name>.p8</prikey.expand.name>
+				<platcert.expand.name>.crt</platcert.expand.name>
 				<plat.pay.product.name>spay</plat.pay.product.name>
 				<plat.micropay.product.name>micropay</plat.micropay.product.name>
 				<plat.wap.pay.product.name>pluginpay</plat.wap.pay.product.name>
@@ -506,6 +534,9 @@
 						<directory>src/main/resources</directory>
 						<filtering>true</filtering>
 					</resource>
+					<resource>
+						<directory>conf/beijing</directory>
+					</resource>
 				</resources>
 			</build>
 			<properties>
@@ -518,10 +549,17 @@
 				<tlot.id.prefix>BJ</tlot.id.prefix>
 				<memcache.client.ip>192.168.99.30:12000,192.168.99.31:12000</memcache.client.ip>
 				<plat.wap.url>http://219.143.210.70</plat.wap.url>
+				<plat.url>http://pay.soopay.net</plat.url>
+				<mer.prikey.path>/home/appusr/umpay/6307_RuYiCai.key.p8</mer.prikey.path>
+				<mer6390.prikey.path>/home/appusr/umpay/6390_RuYiChaiYingYong.key.p8</mer6390.prikey.path>
+				<plat.cert.path>/home/appusr/umpay/cert_2d59.crt</plat.cert.path>
+				<prikey.expand.name>.p8</prikey.expand.name>
+				<platcert.expand.name>.crt</platcert.expand.name>
 				<plat.pay.product.name>spay</plat.pay.product.name>
 				<plat.micropay.product.name>micropay</plat.micropay.product.name>
 				<plat.wap.pay.product.name>pluginpay</plat.wap.pay.product.name>
 			</properties>
 		</profile>
 	</profiles>
+
 </project>

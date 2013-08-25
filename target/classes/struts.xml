@@ -47,8 +47,7 @@
 	
 	</package>
 	<package name="LuckyDraw" namespace="/" extends="default">
-		<action name="charge" class="com.ruyicai.charge.action.ChargeAction"></action>
-		<action name="notify" class="com.ruyicai.charge.action.ChargeNotifyAction"></action>
+		<action name="luckyDrawAction" class="com.ruyicai.draw.controller.LuckyDrawAction"></action>
 	</package>
 	
 </struts>

@@ -1,5 +1,11 @@
 <aspectj>
 <aspects>
+<aspect name="com.ruyicai.draw.domain.PrizeInfo_Roo_ToString"/>
+<aspect name="com.ruyicai.draw.domain.PrizeInfo_Roo_Json"/>
+<aspect name="com.ruyicai.draw.domain.UserDraw_Roo_JavaBean"/>
+<aspect name="com.ruyicai.draw.domain.PrizeInfo_Roo_JavaBean"/>
+<aspect name="com.ruyicai.draw.domain.UserDraw_Roo_ToString"/>
+<aspect name="com.ruyicai.draw.domain.UserDraw_Roo_Json"/>
 </aspects>
 </aspectj>
 
