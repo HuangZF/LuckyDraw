@@ -9,9 +9,9 @@ import org.apache.log4j.Logger;
 
 import com.ruyicai.draw.domain.PrizeInfo;
 
-public class Prize {
+public class PrizeConfig {
 
-	private Logger logger = Logger.getLogger(Prize.class);
+	private Logger logger = Logger.getLogger(PrizeConfig.class);
 	
 	// 奖品信息列表
 	private List<PrizeInfo> list = new ArrayList<PrizeInfo>();
@@ -22,15 +22,15 @@ public class Prize {
 	public volatile boolean  initialized = false;
 	private ReadWriteLock lock = new ReentrantReadWriteLock();
 	
-	private static final Prize INSTANCE = new Prize();
+	private static final PrizeConfig INSTANCE = new PrizeConfig();
 
-	private Prize() {
+	private PrizeConfig() {
 		
 		init(null);
 		initialized = false;
 	}
 
-	public static final Prize getInstance() {
+	public static final PrizeConfig getInstance() {
 		return INSTANCE;
 	}
 

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.ruyicai.draw.dao.PrizeConfigDAO;
 import com.ruyicai.draw.domain.PrizeInfo;
 import com.ruyicai.draw.domain.UserDraw;
-import com.ruyicai.draw.util.Prize;
+import com.ruyicai.draw.util.PrizeConfig;
 
 @Service
 public class PrizeService {
@@ -43,7 +43,7 @@ public class PrizeService {
 		prizeConfigDAO.updatePrizeInfo(pi, ud);
 
 		// 如果某一奖品数量为0，则将此奖品从list中去除
-		Prize prize = Prize.getInstance();
+		PrizeConfig prize = PrizeConfig.getInstance();
 		if(pi.getNum() == 0)
 		{
 			List<PrizeInfo> piList = prize.getList();

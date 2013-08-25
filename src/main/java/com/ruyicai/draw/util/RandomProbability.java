@@ -24,7 +24,7 @@ public class RandomProbability {
 			// 奖品发生概率与其延迟率共同影响结果
 			if(randomPro < proArr[i])   // 小于其概率
 			{
-				Prize p = Prize.getInstance();
+				PrizeConfig p = PrizeConfig.getInstance();
 				List<PrizeInfo> piList = p.getList();
 				double sum = p.getSum();
 				double num = piList.get(i).getNum();

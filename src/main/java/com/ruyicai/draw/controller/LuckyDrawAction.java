@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.ruyicai.draw.domain.PrizeInfo;
 import com.ruyicai.draw.domain.UserDraw;
 import com.ruyicai.draw.service.PrizeService;
-import com.ruyicai.draw.util.Prize;
+import com.ruyicai.draw.util.PrizeConfig;
 import com.ruyicai.draw.util.RandomProbability;
 import com.ruyicai.draw.util.ResponseJson;
 
@@ -51,7 +51,7 @@ public class LuckyDrawAction implements ServletRequestAware, ServletResponseAwar
 		Map<String, String> retMap = new HashMap<String, String>();
 
 		//get prize info
-		Prize prize = Prize.getInstance();
+		PrizeConfig prize = PrizeConfig.getInstance();
 		if(! prize.initialized)
 		{
 			synchronized(this){
