@@ -11,7 +11,7 @@ import com.ruyicai.draw.domain.PrizeInfo;
 import com.ruyicai.draw.domain.UserDraw;
 
 @Component
-public class PrizeConfigDAO {
+public class PrizeInfoDAO {
 
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -22,7 +22,7 @@ public class PrizeConfigDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public List<PrizeInfo> findPrizeConfigList() {
+	public List<PrizeInfo> findPrizeInfoList() {
 		String sql = "select pi.id,pi.name,pi.level,pi.num,pi.arise_probability,pi.delay_probability from prize_info pi order by pi.arise_probability asc";
 		Query q = entityManager.createNativeQuery(sql, PrizeInfo.class);
 		List<PrizeInfo> returnList = q.getResultList();
@@ -35,8 +35,8 @@ public class PrizeConfigDAO {
 	 * @return
 	 */
 	@Transactional
-	public PrizeInfo merge(PrizeInfo prizeConfig) {
-		PrizeInfo merged = this.entityManager.merge(prizeConfig);
+	public PrizeInfo merge(PrizeInfo pi) {
+		PrizeInfo merged = this.entityManager.merge(pi);
 		this.entityManager.flush();
 		return merged;
 	}
@@ -58,10 +58,10 @@ public class PrizeConfigDAO {
 	 * @param ud
 	 */
 	@Transactional
-	public void updatePrizeInfo(PrizeInfo prizeConfig, UserDraw ud)
+	public void updatePrizeInfo(PrizeInfo pi, UserDraw ud)
 	{
 		// 更新奖品信息
-		merge(prizeConfig);
+		merge(pi);
 
 		// 添加用户抽奖信息
 		createUserDraw(ud);

@@ -15,9 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ruyicai.draw.domain.PrizeInfo;
 import com.ruyicai.draw.domain.UserDraw;
-import com.ruyicai.draw.service.PrizeService;
+import com.ruyicai.draw.service.DrawPrizeService;
 import com.ruyicai.draw.util.PrizeConfig;
-import com.ruyicai.draw.util.RandomProbability;
+import com.ruyicai.draw.util.ResponseCode;
 import com.ruyicai.draw.util.ResponseJson;
 
 
@@ -38,7 +38,7 @@ public class LuckyDrawAction implements ServletRequestAware, ServletResponseAwar
 	}
 
 	@Autowired
-	PrizeService prizeService;
+	DrawPrizeService drawPrizeService;
 
 	/**
 	 * 抽奖活动
@@ -46,68 +46,67 @@ public class LuckyDrawAction implements ServletRequestAware, ServletResponseAwar
 	 */
 	public String drawActivity()
 	{
-
-		// 返回map
+		// 返回map json信息
 		Map<String, String> retMap = new HashMap<String, String>();
+		String respCode = ResponseCode.OK.value;
 
-		//get prize info
+		// get prizeconfig singleton instance
 		PrizeConfig prize = PrizeConfig.getInstance();
 		if(! prize.initialized)
 		{
-			synchronized(this){
+			synchronized(prize)
+			{
 				if(! prize.initialized)
 				{
-					List<PrizeInfo> list = prizeService.queryPrizeConfigList();
+					List<PrizeInfo> list = drawPrizeService.queryPrizeConfigList();
 					prize.init(list);
 				}
 			}
 		}
-
-		// list 已按概率升序排序
-		// get proArr
-		List<PrizeInfo> pcList = prize.getList();
-		if(pcList.size() > 0)
+		// 获取奖品信息
+		Map<Integer, PrizeInfo> piMap = prize.getPrizeInfo();
+		if(piMap != null)
 		{
-			int[] proArr = new int[pcList.size()];
-			for(int i=0;i<pcList.size();i++)
+			int prizePos = 0;
+			PrizeInfo pi = null;
+			for(Integer key : piMap.keySet())
 			{
-				proArr[i] = pcList.get(i).getAriseProbability();
+				prizePos = key;
+				pi = piMap.get(key);
 			}
+			if(pi != null && !"".equals(pi))
+			{
+				logger.info("中奖信息：奖品id="+pi.getId()+",奖品名称="+ pi.getName()
+						+",奖品等级="+pi.getLevel()+",奖品发生概率="+pi.getAriseProbability()
+						+",奖品数量="+pi.getNum()+",奖品延迟率="+pi.getDelayProbability());
 
-			// 根据随机概率获取中奖项,奖品项所在list中的位置
-			// the PrizeConfig's position in the List
-			int prizePos = RandomProbability.getDrawRandomProbability(proArr);
+				// 用户中奖信息
+				UserDraw ud = new UserDraw();
+				ud.setUserno("0132123");
+				ud.setPrizeId(pi.getId());
+				ud.setDrawTime(new Date());
 
-			// 获取奖品信息
-			PrizeInfo pc1 = pcList.get(prizePos);
-			logger.info("中奖信息：奖品id="+pc1.getId()+",奖品名称="+ pc1.getName()
-					+",奖品等级="+pc1.getLevel()+",奖品发生概率="+pc1.getAriseProbability()
-					+",奖品数量="+pc1.getNum()+",奖品延迟率="+pc1.getDelayProbability());
+				// 减少奖品信息及插入用户中奖信息
+				// 同时也更新单例对象中的奖品信息
+				// 保证在同一事务中处理
+				drawPrizeService.updatePrizeInfo(pi, ud, prizePos);
 
-			// 用户中奖信息
-			UserDraw ud = new UserDraw();
-			ud.setUserno("0132123");
-			ud.setPrizeId(pc1.getId());
-			ud.setDrawTime(new Date());
-
-			// 减少奖品信息及插入用户中奖信息
-			// 同时也更新单例对象中的奖品信息
-			// 保证在同一事务中处理
-			prizeService.updatePrizeInfo(pc1, ud, prizePos);
-
-			retMap.put("id", String.valueOf(pc1.getId()));
-			retMap.put("name", pc1.getName());
-			retMap.put("level", pc1.getLevel());
-			retMap.put("returnCode", "0000");
-
-			// 返回获取信息
+				// 返回获取信息
+				retMap.put("id", String.valueOf(pi.getId()));
+				retMap.put("name", pi.getName());
+				retMap.put("level", pi.getLevel());
+			}else
+			{
+				respCode = ResponseCode.Draw_Expired.value;
+			}
 		}else
 		{
 			System.out.println("抽奖结束!");
-			retMap.put("returnCode", "0001");
+			respCode = ResponseCode.Draw_Expired.value;
 		}
 
-		ResponseJson.printJson(this.response, retMap);
+		retMap.put("respCode", respCode);
+		ResponseJson.printJsonMap(this.response, retMap, "GBK");
 		return null;
 	}
 

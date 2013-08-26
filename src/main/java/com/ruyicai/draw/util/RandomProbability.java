@@ -10,44 +10,57 @@ public class RandomProbability {
 
 	/**
 	 * 获取随机概率在概率数组中的位置(即奖品在list中的位置)
-	 * @param arry 按升序排序的整型数组
+	 * @param piList 奖品列表
+	 * @return 奖品在列表中的位置
+	 */
+	public static int getPrizeRandomPosition(List<PrizeInfo> piList)
+	{
+		// list 已按概率升序排序
+		int[] proArr = new int[piList.size()];
+		int maxProbability = getMaxInt(proArr); // 最大概率
+		for(int i=0;i<piList.size();i++)
+		{
+			proArr[i] = piList.get(i).getAriseProbability();
+		}
+		int resultPosition = -1;
+		while(resultPosition < 0)
+		{
+			resultPosition = getPositionByRandomProbability(proArr, maxProbability, piList);
+		}
+
+		return resultPosition;
+	}
+
+	/**
+	 * 根据随机概率返回奖品在list上的位置.
+	 * @param proArr
+	 * @param maxProbability
+	 * @param piList
 	 * @return
 	 */
-	public static int getDrawRandomProbability(int[] proArr)
+	public static int getPositionByRandomProbability(int[] proArr, int maxProbability, List<PrizeInfo> piList)
 	{
-		boolean reGet = false;  // 重新获取
-		int resultPosition = proArr.length - 1; // 初始为概率最大奖品的位置
-		int maxProbability = getMaxInt(proArr); // 最大概率
+		int resultPosition = -1;
+
 		for(int i=0;i<proArr.length;i++)
 		{
 			int randomPro = getRandomPro(1,maxProbability);
 			// 奖品发生概率与其延迟率共同影响结果
 			if(randomPro < proArr[i])   // 小于其概率
 			{
-				PrizeConfig p = PrizeConfig.getInstance();
-				List<PrizeInfo> piList = p.getList();
-				double sum = p.getSum();
+				PrizeConfig pc = PrizeConfig.getInstance();
+				double sum = pc.getSum();
 				double num = piList.get(i).getNum();
 				double currentDelayPro = div(num, sum, 10);
 				double delayPro = piList.get(i).getDelayProbability();
 				if(Double.compare(currentDelayPro, delayPro) >= 0) // 大于或等于其延迟率
 				{
 					resultPosition = i;
-					return resultPosition;
-				}else
-				{
-					reGet = true;
-					break;
 				}
 			}else
 			{
 				maxProbability -= proArr[i];
 			}
-		}
-		// 需重新获取
-		if(reGet)
-		{
-			resultPosition = getDrawRandomProbability(proArr);
 		}
 
 		return resultPosition;

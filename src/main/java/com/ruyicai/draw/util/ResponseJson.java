@@ -17,11 +17,14 @@ public class ResponseJson {
 	private static Logger logger = Logger.getLogger(ResponseJson.class);
 	
 	/**
-	 * 打印JSON信息
+	 * 返回json map信息
+	 * @param response
+	 * @param retMap
+	 * @param charSet
 	 */
-	public static void printJson(HttpServletResponse response, Map<String, String> retMap) {
+	public static void printJsonMap(HttpServletResponse response, Map<String, String> retMap ,String charSet) {
 		try {
-			response.setCharacterEncoding("utf-8");
+			response.setCharacterEncoding(charSet);
 			response.getWriter().write(JsonUtil.toJson(retMap));
 			response.getWriter().flush();
 			response.getWriter().close();
@@ -30,13 +33,16 @@ public class ResponseJson {
 			e.printStackTrace();
 		}
 	}
-
+	
 	/**
-	 * 打印GBK JSON List信息
+	 * 返回json list 信息.
+	 * @param response
+	 * @param list
+	 * @param charSet
 	 */
-	public static void printJsonGBK(HttpServletResponse response, List<String> list) {
+	public static void printJsonGBK(HttpServletResponse response, List<String> list, String charSet) {
 		try {
-			response.setCharacterEncoding("GBK");
+			response.setCharacterEncoding(charSet);
 			response.getWriter().write(JsonUtil.toJson(list));
 			response.getWriter().flush();
 			response.getWriter().close();

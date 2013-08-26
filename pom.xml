@@ -474,22 +474,13 @@
 			<properties>
 				<maven.test.skip>true</maven.test.skip>
 				<sys.target>test</sys.target>
-				<database.url.mysql>jdbc:mysql://localhost:3306/luckydraw?characterEncoding=utf-8</database.url.mysql>
+				<database.url.mysql>jdbc:mysql://192.168.0.92:3306/luckydraw?characterEncoding=utf-8</database.url.mysql>
 				<database.driverClassName.mysql>com.mysql.jdbc.Driver</database.driverClassName.mysql>
-				<database.username.mysql>root</database.username.mysql>
-				<database.password.mysql>af7226</database.password.mysql>
+				<database.username.mysql>jrtConsole</database.username.mysql>
+				<database.password.mysql>jrtConsole</database.password.mysql>
 				<tlot.id.prefix>TE</tlot.id.prefix>
 				<memcache.client.ip>192.168.0.92:12000</memcache.client.ip>
 				<plat.wap.url>http://219.143.210.70</plat.wap.url>
-				<plat.url>http://pay.soopay.net</plat.url>
-				<mer.prikey.path>c:/temp/cert/6307_RuYiCai.key.p8</mer.prikey.path>
-				<mer6390.prikey.path>c:/temp/cert/6390_RuYiChaiYingYong.key.p8</mer6390.prikey.path>
-				<plat.cert.path>c:/temp/cert/cert_2d59.crt</plat.cert.path>
-				<prikey.expand.name>.p8</prikey.expand.name>
-				<platcert.expand.name>.crt</platcert.expand.name>
-				<plat.pay.product.name>spay</plat.pay.product.name>
-				<plat.micropay.product.name>micropay</plat.micropay.product.name>
-				<plat.wap.pay.product.name>pluginpay</plat.wap.pay.product.name>
 			</properties>
 		</profile>
 		<profile>
@@ -515,15 +506,6 @@
 				<tlot.id.prefix>TE</tlot.id.prefix>
 				<memcache.client.ip>192.168.0.92:12000</memcache.client.ip>
 				<plat.wap.url>http://219.143.210.70</plat.wap.url>
-				<plat.url>http://pay.soopay.net</plat.url>
-				<mer.prikey.path>/home/appusr/chargecenter/umpay/6307_RuYiCai.key.p8</mer.prikey.path>
-				<mer6390.prikey.path>/home/appusr/chargecenter/umpay/6390_RuYiChaiYingYong.key.p8</mer6390.prikey.path>
-				<plat.cert.path>/home/appusr/chargecenter/umpay/cert_2d59.crt</plat.cert.path>
-				<prikey.expand.name>.p8</prikey.expand.name>
-				<platcert.expand.name>.crt</platcert.expand.name>
-				<plat.pay.product.name>spay</plat.pay.product.name>
-				<plat.micropay.product.name>micropay</plat.micropay.product.name>
-				<plat.wap.pay.product.name>pluginpay</plat.wap.pay.product.name>
 			</properties>
 		</profile>
 		<profile>
@@ -549,15 +531,6 @@
 				<tlot.id.prefix>BJ</tlot.id.prefix>
 				<memcache.client.ip>192.168.99.30:12000,192.168.99.31:12000</memcache.client.ip>
 				<plat.wap.url>http://219.143.210.70</plat.wap.url>
-				<plat.url>http://pay.soopay.net</plat.url>
-				<mer.prikey.path>/home/appusr/umpay/6307_RuYiCai.key.p8</mer.prikey.path>
-				<mer6390.prikey.path>/home/appusr/umpay/6390_RuYiChaiYingYong.key.p8</mer6390.prikey.path>
-				<plat.cert.path>/home/appusr/umpay/cert_2d59.crt</plat.cert.path>
-				<prikey.expand.name>.p8</prikey.expand.name>
-				<platcert.expand.name>.crt</platcert.expand.name>
-				<plat.pay.product.name>spay</plat.pay.product.name>
-				<plat.micropay.product.name>micropay</plat.micropay.product.name>
-				<plat.wap.pay.product.name>pluginpay</plat.wap.pay.product.name>
 			</properties>
 		</profile>
 	</profiles>
