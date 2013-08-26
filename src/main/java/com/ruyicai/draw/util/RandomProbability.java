@@ -17,11 +17,11 @@ public class RandomProbability {
 	{
 		// list 已按概率升序排序
 		int[] proArr = new int[piList.size()];
-		int maxProbability = getMaxInt(proArr); // 最大概率
 		for(int i=0;i<piList.size();i++)
 		{
 			proArr[i] = piList.get(i).getAriseProbability();
 		}
+		int maxProbability = getMaxInt(proArr); // 最大概率
 		int resultPosition = -1;
 		while(resultPosition < 0)
 		{

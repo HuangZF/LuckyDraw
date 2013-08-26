@@ -22,7 +22,7 @@ public class ResponseJson {
 	 * @param retMap
 	 * @param charSet
 	 */
-	public static void printJsonMap(HttpServletResponse response, Map<String, String> retMap ,String charSet) {
+	public static void respJsonMap(HttpServletResponse response, Map<String, String> retMap ,String charSet) {
 		try {
 			response.setCharacterEncoding(charSet);
 			response.getWriter().write(JsonUtil.toJson(retMap));
@@ -40,7 +40,7 @@ public class ResponseJson {
 	 * @param list
 	 * @param charSet
 	 */
-	public static void printJsonGBK(HttpServletResponse response, List<String> list, String charSet) {
+	public static void respJsonGBK(HttpServletResponse response, List<String> list, String charSet) {
 		try {
 			response.setCharacterEncoding(charSet);
 			response.getWriter().write(JsonUtil.toJson(list));

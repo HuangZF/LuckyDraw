@@ -10,6 +10,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.apache.log4j.Logger;
 
 import com.ruyicai.draw.domain.PrizeInfo;
+import com.ruyicai.draw.exception.RuyicaiException;
 
 public class PrizeConfig {
 
@@ -45,7 +46,7 @@ public class PrizeConfig {
 	 * 设置奖品信息.
 	 * @param list
 	 */
-	protected void resetPrize(List<PrizeInfo> list) {
+	protected void resetPrize(List<PrizeInfo> list) throws RuyicaiException{
 		lock.writeLock().lock();
 		try {
 			if(list != null && list.size() > 0)
@@ -59,21 +60,17 @@ public class PrizeConfig {
 					}
 				}
 			}
-
 			initialized = true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error("resetPrizeConfig error:", e);
-		} finally {
+		}finally {
 			lock.writeLock().unlock();
 		}
 	}
 
 	/**
-	 * 获取奖品信息.
+	 * 根据随机概率获取中奖信息.
 	 * @return
 	 */
-	public Map<Integer, PrizeInfo> getPrizeInfo()
+	public Map<Integer, PrizeInfo> getPrizeInfo() throws RuyicaiException
 	{
 		lock.writeLock().lock();
 		try
@@ -92,10 +89,6 @@ public class PrizeConfig {
 				
 				return piMap;
 			}
-		}catch(Exception e)
-		{
-			e.printStackTrace();
-			logger.error("getPrizeInfo erroe:",e);
 		}finally
 		{
 			lock.writeLock().unlock();
@@ -107,16 +100,12 @@ public class PrizeConfig {
 	 * 删除奖品信息
 	 * @param prizePos 奖品在list中的位置
 	 */
-	public void removePrizeInfo(int prizePos)
+	public void removePrizeInfo(int prizePos) throws RuyicaiException
 	{
 		lock.writeLock().lock();
 		try
 		{
 			this.list.remove(prizePos);
-		}catch(Exception e)
-		{
-			e.printStackTrace();
-			logger.error("removePrizeInfo error:", e);
 		}finally
 		{
 			lock.writeLock().unlock();

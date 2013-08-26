@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.ruyicai.draw.dao.PrizeInfoDAO;
 import com.ruyicai.draw.domain.PrizeInfo;
 import com.ruyicai.draw.domain.UserDraw;
+import com.ruyicai.draw.exception.RuyicaiException;
 import com.ruyicai.draw.util.PrizeConfig;
 
 @Service
@@ -22,7 +23,7 @@ public class DrawPrizeService {
 	 * 获取奖品信息.
 	 * @return
 	 */
-	public List<PrizeInfo> queryPrizeConfigList()
+	public List<PrizeInfo> queryPrizeConfigList() throws RuyicaiException
 	{	
 		return prizeInfoDAO.findPrizeInfoList();
 	}
@@ -33,7 +34,7 @@ public class DrawPrizeService {
 	 * @param ud
 	 * @param prizePos
 	 */
-	public void updatePrizeInfo(PrizeInfo pi, UserDraw ud, int prizePos) {
+	public void updatePrizeInfo(PrizeInfo pi, UserDraw ud, int prizePos) throws RuyicaiException{
 
 		// 某一奖品数量-1
 		System.out.println("奖品数量->前："+pi.getNum());

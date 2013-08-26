@@ -50,64 +50,81 @@ public class LuckyDrawAction implements ServletRequestAware, ServletResponseAwar
 		Map<String, String> retMap = new HashMap<String, String>();
 		String respCode = ResponseCode.OK.value;
 
-		// get prizeconfig singleton instance
-		PrizeConfig prize = PrizeConfig.getInstance();
-		if(! prize.initialized)
+		try
 		{
-			synchronized(prize)
+			// get prizeconfig singleton instance
+			PrizeConfig pc = getSingletonInstance();
+			// 根据随机概率获取奖品信息
+			Map<Integer, PrizeInfo> piMap = pc.getPrizeInfo();
+			if(piMap != null)
 			{
-				if(! prize.initialized)
+				int prizePos = 0;
+				PrizeInfo pi = null;
+				for(Integer key : piMap.keySet())
 				{
-					List<PrizeInfo> list = drawPrizeService.queryPrizeConfigList();
-					prize.init(list);
+					prizePos = key;
+					pi = piMap.get(key);
 				}
-			}
-		}
-		// 获取奖品信息
-		Map<Integer, PrizeInfo> piMap = prize.getPrizeInfo();
-		if(piMap != null)
-		{
-			int prizePos = 0;
-			PrizeInfo pi = null;
-			for(Integer key : piMap.keySet())
-			{
-				prizePos = key;
-				pi = piMap.get(key);
-			}
-			if(pi != null && !"".equals(pi))
-			{
-				logger.info("中奖信息：奖品id="+pi.getId()+",奖品名称="+ pi.getName()
-						+",奖品等级="+pi.getLevel()+",奖品发生概率="+pi.getAriseProbability()
-						+",奖品数量="+pi.getNum()+",奖品延迟率="+pi.getDelayProbability());
+				if(pi != null && !"".equals(pi))
+				{
+					logger.info("中奖信息：奖品id="+pi.getId()+",奖品名称="+ pi.getName()
+							+",奖品等级="+pi.getLevel()+",奖品发生概率="+pi.getAriseProbability()
+							+",奖品数量="+pi.getNum()+",奖品延迟率="+pi.getDelayProbability());
 
-				// 用户中奖信息
-				UserDraw ud = new UserDraw();
-				ud.setUserno("0132123");
-				ud.setPrizeId(pi.getId());
-				ud.setDrawTime(new Date());
+					// 用户中奖信息
+					UserDraw ud = new UserDraw();
+					ud.setUserno("0132123");
+					ud.setPrizeId(pi.getId());
+					ud.setDrawTime(new Date());
 
-				// 减少奖品信息及插入用户中奖信息
-				// 同时也更新单例对象中的奖品信息
-				// 保证在同一事务中处理
-				drawPrizeService.updatePrizeInfo(pi, ud, prizePos);
+					// 减少奖品信息及插入用户中奖信息
+					// 同时也更新单例对象中的奖品信息
+					// 保证在同一事务中处理
+					drawPrizeService.updatePrizeInfo(pi, ud, prizePos);
 
-				// 返回获取信息
-				retMap.put("id", String.valueOf(pi.getId()));
-				retMap.put("name", pi.getName());
-				retMap.put("level", pi.getLevel());
+					// 返回获取信息
+					retMap.put("id", String.valueOf(pi.getId()));
+					retMap.put("name", pi.getName());
+					retMap.put("level", pi.getLevel());
+				}else
+				{
+					respCode = ResponseCode.Draw_Expired.value;
+				}
 			}else
 			{
 				respCode = ResponseCode.Draw_Expired.value;
 			}
-		}else
+		}catch(Exception e)
 		{
-			System.out.println("抽奖结束!");
-			respCode = ResponseCode.Draw_Expired.value;
+			e.printStackTrace();
+			logger.error("drawPrizeInfo erroe:",e);
+			respCode = ResponseCode.ERROR.value;
 		}
 
 		retMap.put("respCode", respCode);
-		ResponseJson.printJsonMap(this.response, retMap, "GBK");
+		ResponseJson.respJsonMap(this.response, retMap, "GBK");
 		return null;
+	}
+	
+	/**
+	 * 获取奖品配置单例信息.
+	 * @return
+	 */
+	private PrizeConfig getSingletonInstance()
+	{
+		PrizeConfig pc = PrizeConfig.getInstance();
+		if(! pc.initialized)
+		{
+			synchronized(pc)
+			{
+				if(! pc.initialized)
+				{
+					List<PrizeInfo> list = drawPrizeService.queryPrizeConfigList();
+					pc.init(list);
+				}
+			}
+		}
+		return pc;
 	}
 
 }
