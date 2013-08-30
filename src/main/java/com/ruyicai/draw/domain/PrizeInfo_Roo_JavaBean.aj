@@ -4,6 +4,7 @@
 package com.ruyicai.draw.domain;
 
 import com.ruyicai.draw.domain.PrizeInfo;
+import java.util.Date;
 
 privileged aspect PrizeInfo_Roo_JavaBean {
     
@@ -31,12 +32,20 @@ privileged aspect PrizeInfo_Roo_JavaBean {
         this.level = level;
     }
     
-    public int PrizeInfo.getNum() {
-        return this.num;
+    public int PrizeInfo.getSum() {
+        return this.sum;
     }
     
-    public void PrizeInfo.setNum(int num) {
-        this.num = num;
+    public void PrizeInfo.setSum(int sum) {
+        this.sum = sum;
+    }
+    
+    public int PrizeInfo.getRemainNum() {
+        return this.remainNum;
+    }
+    
+    public void PrizeInfo.setRemainNum(int remainNum) {
+        this.remainNum = remainNum;
     }
     
     public int PrizeInfo.getAriseProbability() {
@@ -53,6 +62,30 @@ privileged aspect PrizeInfo_Roo_JavaBean {
     
     public void PrizeInfo.setDelayProbability(double delayProbability) {
         this.delayProbability = delayProbability;
+    }
+    
+    public Date PrizeInfo.getStartDate() {
+        return this.startDate;
+    }
+    
+    public void PrizeInfo.setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+    
+    public Date PrizeInfo.getEndDate() {
+        return this.endDate;
+    }
+    
+    public void PrizeInfo.setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+    
+    public String PrizeInfo.getActiveTimes() {
+        return this.activeTimes;
+    }
+    
+    public void PrizeInfo.setActiveTimes(String activeTimes) {
+        this.activeTimes = activeTimes;
     }
     
 }

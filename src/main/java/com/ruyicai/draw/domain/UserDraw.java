@@ -31,6 +31,12 @@ public class UserDraw{
 	@Column(name = "prize_id")
 	private int prizeId;
 	
-	@Column(name = "draw_time")
-	private Date drawTime;
+	@Column(name = "pay_object")
+	private String payObject;
+	
+	@Column(name = "gain_object")
+	private String gainObject;
+	
+	@Column(name = "draw_date")
+	private Date drawDate;
 }

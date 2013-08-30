@@ -1,5 +1,7 @@
 package com.ruyicai.draw.domain;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,12 +31,24 @@ public class PrizeInfo{
 	@Column(name = "level")
 	private String level;
 	
-	@Column(name = "num")
-	private int num;
+	@Column(name = "sum")
+	private int sum;
+	
+	@Column(name = "remain_num")
+	private int remainNum;
 	
 	@Column(name = "arise_probability")
 	private int ariseProbability;
 	
 	@Column(name = "delay_probability")
 	private double delayProbability;
+	
+	@Column(name = "start_date")
+	private Date startDate;
+	
+	@Column(name = "end_date")
+	private Date endDate;
+	
+	@Column(name = "active_times")
+	private String activeTimes;
 }

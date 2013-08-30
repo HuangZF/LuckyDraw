@@ -16,16 +16,18 @@ public class RandomProbability {
 	public static int getPrizeRandomPosition(List<PrizeInfo> piList)
 	{
 		// list 已按概率升序排序
-		int[] proArr = new int[piList.size()];
+		int[] proArr = new int[piList.size()]; // 概率数组
+		double remainSum = 0; // 剩余奖品总数
 		for(int i=0;i<piList.size();i++)
 		{
 			proArr[i] = piList.get(i).getAriseProbability();
+			remainSum += piList.get(i).getRemainNum();
 		}
 		int maxProbability = getMaxInt(proArr); // 最大概率
 		int resultPosition = -1;
 		while(resultPosition < 0)
 		{
-			resultPosition = getPositionByRandomProbability(proArr, maxProbability, piList);
+			resultPosition = getPositionByRandomProbability(proArr, maxProbability, remainSum, piList);
 		}
 
 		return resultPosition;
@@ -33,29 +35,29 @@ public class RandomProbability {
 
 	/**
 	 * 根据随机概率返回奖品在list上的位置.
+	 * 
 	 * @param proArr
 	 * @param maxProbability
+	 * @param remainSum
 	 * @param piList
 	 * @return
 	 */
-	public static int getPositionByRandomProbability(int[] proArr, int maxProbability, List<PrizeInfo> piList)
+	public static int getPositionByRandomProbability(int[] proArr, int maxProbability, double remainSum, List<PrizeInfo> piList)
 	{
 		int resultPosition = -1;
-
 		for(int i=0;i<proArr.length;i++)
 		{
 			int randomPro = getRandomPro(1,maxProbability);
 			// 奖品发生概率与其延迟率共同影响结果
 			if(randomPro < proArr[i])   // 小于其概率
 			{
-				PrizeConfig pc = PrizeConfig.getInstance();
-				double sum = pc.getSum();
-				double num = piList.get(i).getNum();
-				double currentDelayPro = div(num, sum, 10);
+				double remainNum = piList.get(i).getRemainNum();
+				double currentDelayPro = div(remainNum, remainSum, 10);
 				double delayPro = piList.get(i).getDelayProbability();
 				if(Double.compare(currentDelayPro, delayPro) >= 0) // 大于或等于其延迟率
 				{
 					resultPosition = i;
+					break;
 				}
 			}else
 			{

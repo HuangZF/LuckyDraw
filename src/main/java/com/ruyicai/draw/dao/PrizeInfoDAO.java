@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ruyicai.draw.domain.PrizeInfo;
-import com.ruyicai.draw.domain.UserDraw;
 
 @Component
 public class PrizeInfoDAO {
@@ -17,21 +16,34 @@ public class PrizeInfoDAO {
 	private EntityManager entityManager;
 
 	/**
-	 * 获取所有的奖品信息
+	 * 获取奖品列表信息
+	 * @param activeTimes 活动期次
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	@Transactional
-	public List<PrizeInfo> findPrizeInfoList() {
-		String sql = "select pi.id,pi.name,pi.level,pi.num,pi.arise_probability,pi.delay_probability from prize_info pi order by pi.arise_probability asc";
+	public List<PrizeInfo> findPrizeInfoList(String activeTimes) {
+		String sql = "select pi.id,pi.name,pi.level,pi.sum,pi.remain_num,pi.arise_probability," +
+				"pi.delay_probability,pi.start_date,pi.end_date,pi.active_times " +
+				"from prize_info pi where pi.remain_num != '0' and pi.active_times = ? order by pi.arise_probability asc";
 		Query q = entityManager.createNativeQuery(sql, PrizeInfo.class);
+		q.setParameter(1, activeTimes);
 		List<PrizeInfo> returnList = q.getResultList();
 		return returnList;
+	}
+	
+	/**
+	 * 获取奖品信息
+	 * @param id 奖品id
+	 * @return
+	 */
+	public PrizeInfo findPrizeInfoById(Integer id) {
+		PrizeInfo prizeInfo = entityManager.find(PrizeInfo.class, id);
+		return prizeInfo;
 	}
 
 	/**
 	 * 更新奖品信息.
-	 * @param prizeConfig
+	 * @param pi
 	 * @return
 	 */
 	@Transactional
@@ -40,31 +52,19 @@ public class PrizeInfoDAO {
 		this.entityManager.flush();
 		return merged;
 	}
-
+	
 	/**
-	 * 增加用户抽奖信息
-	 * @param userMap
+	 * 更新奖品信息.
+	 * @param id
 	 * @return
 	 */
 	@Transactional
-	public UserDraw createUserDraw(UserDraw userDraw) {
-		entityManager.persist(userDraw);
-		return userDraw;
-	}
-
-	/**
-	 * 更新奖品信息，同时添加用户抽奖信息.
-	 * @param prizeConfig
-	 * @param ud
-	 */
-	@Transactional
-	public void updatePrizeInfo(PrizeInfo pi, UserDraw ud)
+	public int updatePrizeInfo(int id)
 	{
-		// 更新奖品信息
-		merge(pi);
-
-		// 添加用户抽奖信息
-		createUserDraw(ud);
+		String sql = "update prize_info p set p.remain_num = (p.remain_num - 1)  where (p.remain_num -1)  >= 0 and p.id = ?";
+		Query q = this.entityManager.createNativeQuery(sql);
+		q.setParameter(1, id);
+		return q.executeUpdate();
 	}
 
 }

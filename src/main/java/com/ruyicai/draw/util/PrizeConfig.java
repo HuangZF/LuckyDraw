@@ -53,10 +53,10 @@ public class PrizeConfig {
 			{
 				for(PrizeInfo pi : list)
 				{
-					if(pi.getNum() > 0)
+					if(pi.getSum() > 0)
 					{
 						this.list.add(pi);
-						setSum(getSum() + pi.getNum());
+						setSum(getSum() + pi.getSum());
 					}
 				}
 			}
@@ -68,6 +68,8 @@ public class PrizeConfig {
 
 	/**
 	 * 根据随机概率获取中奖信息.
+	 * <p>以抢占方式获取</p>
+	 * <p>同时更新奖品单例中的奖品数量</p>
 	 * @return
 	 */
 	public Map<Integer, PrizeInfo> getPrizeInfo() throws RuyicaiException
@@ -80,11 +82,27 @@ public class PrizeConfig {
 				Map<Integer, PrizeInfo> piMap = new HashMap<Integer, PrizeInfo>();
 
 				// 根据随机概率获取中奖项,奖品项所在list中的位置
-				// the PrizeConfig's position in the List
 				int prizePos = RandomProbability.getPrizeRandomPosition(list);
 
 				// 获取奖品信息
 				PrizeInfo pi = list.get(prizePos);
+				
+				// 更新单例中奖品信息
+				// 某一奖品数量-1
+				System.out.println("奖品数量->前："+pi.getRemainNum());
+				pi.setRemainNum(pi.getRemainNum() - 1);
+				System.out.println("奖品数量->后："+ pi.getRemainNum());
+				
+				// 如果某一奖品数量为0，则将此奖品从list中去除
+				if(pi.getRemainNum() == 0)
+				{
+					removePrizeInfo(prizePos);
+				}
+				
+				// 总奖品数-1
+				setSum(getSum() - 1);
+				System.out.println("奖品总数:" + getSum());
+				
 				piMap.put(prizePos, pi);
 				
 				return piMap;
@@ -112,12 +130,13 @@ public class PrizeConfig {
 		}
 	}
 
-
-	public synchronized int getSum() {
+	// -------------不需要同步,因均在锁内调用
+	public int getSum() {
 		return sum;
 	}
 
-	public synchronized void setSum(int sum) {
+	public void setSum(int sum) {
 		this.sum = sum;
 	}
+
 }

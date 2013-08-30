@@ -32,12 +32,28 @@ privileged aspect UserDraw_Roo_JavaBean {
         this.prizeId = prizeId;
     }
     
-    public Date UserDraw.getDrawTime() {
-        return this.drawTime;
+    public String UserDraw.getPayObject() {
+        return this.payObject;
     }
     
-    public void UserDraw.setDrawTime(Date drawTime) {
-        this.drawTime = drawTime;
+    public void UserDraw.setPayObject(String payObject) {
+        this.payObject = payObject;
+    }
+    
+    public String UserDraw.getGainObject() {
+        return this.gainObject;
+    }
+    
+    public void UserDraw.setGainObject(String gainObject) {
+        this.gainObject = gainObject;
+    }
+    
+    public Date UserDraw.getDrawDate() {
+        return this.drawDate;
+    }
+    
+    public void UserDraw.setDrawDate(Date drawDate) {
+        this.drawDate = drawDate;
     }
     
 }
