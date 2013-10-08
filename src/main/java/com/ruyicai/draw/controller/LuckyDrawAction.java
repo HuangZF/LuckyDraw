@@ -64,7 +64,7 @@ public class LuckyDrawAction implements ServletRequestAware, ServletResponseAwar
 		}catch(Exception e)
 		{
 			e.printStackTrace();
-			logger.error("drawPrizeInfo erroe:",e);
+			logger.error("drawPrizeInfo error:",e);
 			respCode = ResponseCode.ERROR.value;
 		}
 
